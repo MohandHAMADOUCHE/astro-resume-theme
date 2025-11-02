@@ -1,5 +1,7 @@
 ---
-const { title, sub_title, years, details } = Astro.props;
+const { title, sub_title, years, details, thesisUrl, showDetails = true } = Astro.props as any;
+const locale = Astro.url.pathname.startsWith('/fr') ? 'fr' : 'en';
+const thesisLabel = locale === 'fr' ? 'PDF de thèse' : 'Thesis PDF';
 ---
 
 <li class="p-5 bg-background-offset shadow-lg rounded-xl border border-default">
@@ -10,5 +12,12 @@ const { title, sub_title, years, details } = Astro.props;
     </div>
     <p class="text-sm text-offset sm:text-right whitespace-nowrap">{years}</p>
   </div>
-  <p class="mt-4 text-offset leading-relaxed">{details}</p>
+  {showDetails && details && (
+    <p class="mt-4 text-offset leading-relaxed">{details}</p>
+  )}
+  {thesisUrl && (
+    <p class="mt-3">
+      <a class="text-primary hover:underline" href={thesisUrl} target="_blank" rel="noopener noreferrer">{thesisLabel}</a>
+    </p>
+  )}
 </li>

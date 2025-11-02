@@ -1,0 +1,43 @@
+---
+import cv from '../../config/cv.json';
+import type { Locale } from '../../i18n/ui';
+import { t } from '../../i18n/ui';
+
+// Determine locale from path for simplicity
+const locale: Locale = Astro.url.pathname.startsWith('/fr') ? 'fr' : 'en';
+
+// Minimal, easier-to-edit data access without complex types
+const basic: any = (cv as any)?.basic ?? {};
+const aboutSource = locale === 'fr' ? basic?.about : basic?.locales?.en?.about;
+const aboutText = aboutSource ? ('' + aboutSource) : '';
+const email: string | undefined = basic?.email;
+// Note: About page intentionally hides job label, Ph.D. badge, and name per request.
+---
+
+<section id="about" class="py-5 px-4 sm:py-10 lg:py-16">
+  <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+  <div class="grid items-center grid-cols-1 gap-12 lg:grid-cols-2">
+      <!-- Left: same image and sizing as Hero -->
+      <div class="relative flex justify-center self-center">
+        <img class="w-full md:max-w-md lg:max-w-md rounded-full transform scale-90" src={basic?.avatar ?? '/images/avatar.png'} loading="eager" alt={basic?.name} />
+      </div>
+
+      <!-- Right: About text only (no job label, no Ph.D. badge, no name) -->
+      <div class="self-center">
+  <div class="retro-card mt-5 text-base sm:text-xl leading-relaxed space-y-4">
+          {aboutText ? (
+            <p style="white-space: pre-line;">{aboutText}</p>
+          ) : (
+            <p>{t(locale, 'aboutFallback', 'I am passionate about DevOps and Cloud.')}</p>
+          )}
+          {email && (
+            <p class="pt-2 text-[0.95rem] sm:text-base">
+              {t(locale, 'aboutContactPrompt', 'If you want to get in touch, please reach me via')}{' '}
+              <a class="text-secondary hover:underline" href={`mailto:${email}`}>email</a>.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

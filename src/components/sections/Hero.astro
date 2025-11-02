@@ -1,40 +1,140 @@
 ---
-import { Image } from 'astro:assets';
-import heroImage from '../../assets/paul_smith.png';
 import { basic } from '../../config/cv.json';
+import type { Locale } from '../../i18n/ui';
+import { t } from '../../i18n/ui';
+
+export interface Props { locale?: Locale; showSummary?: boolean }
+const { locale = 'fr', showSummary = true } = Astro.props as Props;
+// Display Ph.D. badge based on cv.json flag
+const hasPhD: any = !!((basic as any)?.hasPhD);
 ---
 
 <section class="py-5 px-4 sm:py-10 lg:py-16">
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="grid items-center grid-cols-1 gap-12 lg:grid-cols-2">
-            <div class="relative flex justify-center">
-                <Image class="w-full md:max-w-md lg:max-w-md"
-                    src={heroImage}
-                    loading="eager"
-                    alt="Astro Resume Theme - Paul Smith" />
+            <div class="relative flex justify-center self-center">
+                <img class="w-full md:max-w-md lg:max-w-md rounded-full transform scale-90" src={basic?.avatar ?? '/images/avatar.png'} loading="eager" alt={basic?.name} />
             </div>
-            <div>
-                <p class="text-lg text-offset">
-                    {basic?.job}
-                </p>
+            <div class="self-center">
+                <p class="text-lg text-offset flex items-center gap-2">
+                    <span class="hero-job">{(locale === 'en' ? basic?.locales?.en?.job : basic?.job) ?? basic?.job}</span>
+                                        {hasPhD && (
+                                            <span class="inline-flex items-center rounded-full border border-default bg-background px-2 py-0.5 text-xs font-medium text-secondary">Ph.D.</span>
+                                        )}
+                                </p>
 
                 <h1 class="text-2xl font-bold sm:text-4xl lg:text-5xl mt-3">
                     {basic?.name}
                 </h1>
 
-                <p class="mt-5 text-base sm:text-xl">
-                    {basic?.summary}
-                </p>
+                                {showSummary && (
+                                    <p class="mt-5 text-base sm:text-xl">
+                                            {(locale === 'en' ? basic?.locales?.en?.summary : basic?.summary) ?? basic?.summary}
+                                    </p>
+                                )}
 
-                <div class="mt-10 sm:flex sm:items-center sm:space-x-8">
-                    <a href=`/cv/${basic?.cv_file_name}` title="Download CV" download
-                        class="inline-flex items-center justify-center px-10 py-4 text-base text-white
-                            font-semibold transition-all duration-200 rounded
+                <div class="mt-10 sm:flex sm:items-center sm:space-x-4">
+                    <a id="cv-action" href="#" title={t(locale, 'downloadCV', 'Download CV')}
+                        class="inline-flex items-center justify-center px-6 py-3 text-base text-white
+                            font-semibold transition-all duration-200 rounded retro-cta
                             bg-primary hover:bg-secondary focus:bg-secondary" role="button">
-                        Download CV
+                        {t(locale, 'downloadCV', 'Download CV')}
                     </a>
+                    {basic?.email && (
+                        <a href={`mailto:${basic.email}`} title={t(locale, 'contact', 'Contact')}
+                           class="inline-flex items-center justify-center px-6 py-3 text-base font-semibold transition-all duration-200 rounded border border-default hover:bg-background-offset focus:bg-background-offset">
+                            {t(locale, 'contact', 'Contact')}
+                        </a>
+                    )}
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Nice modal popup for CV action -->
+<div id="cv-modal" class="fixed inset-0 z-50 hidden items-center justify-center">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-dismiss="cancel"></div>
+    <div role="dialog" aria-modal="true" aria-labelledby="cv-modal-title"
+         class="relative mx-4 w-full max-w-lg rounded-xl border border-gray-200 bg-white p-6 shadow-2xl">
+            <div class="flex items-start gap-4">
+                <img src="/images/question.png" data-fallback="/404-assets/question.png" alt="?" class="w-32 h-32 sm:w-40 sm:h-40 object-contain select-none rounded-md" loading="lazy" />
+                <div>
+                    <h3 id="cv-modal-title" class="text-xl sm:text-2xl font-semibold text-gray-900">{locale === 'fr' ? 'CV indisponible' : 'CV unavailable'}</h3>
+                    <p class="mt-3 text-base sm:text-lg text-gray-700">
+                        {locale === 'fr'
+                            ? "Oops! Le CV détaillé est indisponible pour l’instant. Pour l’avoir, contactez‑moi pour en discuter."
+                            : "Oops! The detailed CV is currently unavailable. To get it, contact me to discuss."}
+                    </p>
+                </div>
+            </div>
+        <div class="mt-6 flex justify-end gap-3">
+            <button id="cv-modal-cancel" class="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-100">
+                {locale === 'fr' ? 'Non' : 'No'}
+            </button>
+            <button id="cv-modal-confirm" class="px-4 py-2 rounded text-white bg-gray-900 hover:bg-gray-800">
+                OK
+            </button>
+        </div>
+    </div>
+    </div>
+
+<script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('cv-action');
+        const modal = document.getElementById('cv-modal');
+        const confirmBtn = document.getElementById('cv-modal-confirm');
+        const cancelBtn = document.getElementById('cv-modal-cancel');
+        const fallbackImg = modal?.querySelector('img[data-fallback]');
+
+        const isFR = document.documentElement.lang === 'fr';
+        const contactHref = isFR ? '/fr/contact' : '/contact';
+
+        function openModal() {
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // hard-set in case of utility order conflicts
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => confirmBtn?.focus(), 0);
+        }
+
+        function closeAndGo(url) {
+            if (!modal) return (window.location.href = url);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            window.location.href = url;
+        }
+
+        btn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal();
+        });
+
+        confirmBtn?.addEventListener('click', () => closeAndGo(contactHref));
+        cancelBtn?.addEventListener('click', () => closeAndGo('/404'));
+        // Add error fallback for the modal image without inline onerror
+        if (fallbackImg) {
+            fallbackImg.addEventListener('error', () => {
+                const fb = fallbackImg.getAttribute('data-fallback');
+                if (fb && fallbackImg.getAttribute('src') !== fb) {
+                    fallbackImg.setAttribute('src', fb);
+                }
+            }, { once: true });
+        }
+        modal?.addEventListener('click', (ev) => {
+            const target = ev.target;
+            if (target instanceof HTMLElement && target.dataset.dismiss === 'cancel') {
+                closeAndGo('/404');
+            }
+        });
+        window.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+                closeAndGo('/404');
+            }
+        });
+    });
+    </script>

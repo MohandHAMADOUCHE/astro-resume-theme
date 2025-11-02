@@ -1,0 +1,98 @@
+---
+import cv from "../../config/cv.json";
+import type { Locale } from "../../i18n/ui";
+import { t } from "../../i18n/ui";
+
+// Keep props minimal; locale is derived from URL for simplicity
+export interface Props { variant?: "section" | "contained" }
+const { variant = "section" } = Astro.props as Props;
+const locale: Locale = Astro.url.pathname.startsWith('/fr') ? 'fr' : 'en';
+
+// Normalize skills once (no ts-ignore, no risky Array helpers in template)
+const rawSkills: any = (cv as any)?.skills;
+const A: any = ((globalThis as any)?.Array?.isArray(rawSkills)) ? (rawSkills as any) : ([] as any);
+const L: number = (A && typeof A.length === 'number') ? A.length : 0;
+const normalizedGroups: any[] = [] as any;
+for (let i = 0; i < L; i++) {
+  const g: any = A[i] || {};
+  const category = locale === 'en' ? (g?.category_en ?? g?.category) : g?.category;
+  const itemsCandidate: any = locale === 'en' ? (g?.items_en ?? g?.items) : g?.items;
+  const items: any[] = ((globalThis as any)?.Array?.isArray(itemsCandidate)) ? (itemsCandidate as any[]) : ([] as any[]);
+  (normalizedGroups as any).push({ category, items });
+}
+---
+{variant === "section" ? (
+  <section id="skills" class="py-12 bg-background">
+    <div class="container mx-auto px-6">
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold tracking-tight text-foreground">{t(locale, 'skillsTitle')}</h2>
+        <p class="mt-2 text-muted-foreground">{t(locale, 'skillsSubtitle')}</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        {(() => {
+          const G: any = normalizedGroups as any;
+          const GL = (G && typeof G.length === 'number') ? G.length : 0;
+          const nodes: any = [] as any;
+          for (let i = 0; i < GL; i++) {
+            const group: any = G[i] || {};
+            const category = group?.category;
+            const itemsArr: any = ((globalThis as any)?.Array?.isArray(group?.items)) ? group.items : [];
+            const IL = (itemsArr && typeof itemsArr.length === 'number') ? itemsArr.length : 0;
+            const itemNodes: any = [] as any;
+            for (let j = 0; j < IL; j++) {
+              const item: any = itemsArr[j];
+              (itemNodes as any).push(
+                <span class="inline-flex items-center rounded-full border-2 border-default bg-background px-3 py-1 text-sm font-medium text-secondary shadow-sm hover:bg-background-offset transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40" aria-label={`Compétence ${item}`}>
+                  {item}
+                </span>
+              );
+            }
+            (nodes as any).push(
+              <div class="p-5 bg-background-offset shadow-lg rounded-xl border border-default" aria-label={`Groupe de compétences: ${category}`}>
+                <h3 class="text-2xl font-semibold text-foreground mb-3 text-center">{category}</h3>
+                <div class="flex flex-wrap gap-2 justify-center">{itemNodes}</div>
+              </div>
+            );
+          }
+          return nodes as any;
+        })()}
+      </div>
+    </div>
+  </section>
+) : (
+  <div id="skills" class="mb-10">
+    <div class="mb-6">
+      <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{t(locale, 'skillsTitle')}</h2>
+      <p class="mt-1 text-muted-foreground">{t(locale, 'skillsSubtitle')}</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      {(() => {
+        const G: any = normalizedGroups as any;
+        const GL = (G && typeof G.length === 'number') ? G.length : 0;
+        const nodes: any = [] as any;
+        for (let i = 0; i < GL; i++) {
+          const group: any = G[i] || {};
+          const category = group?.category;
+          const itemsArr: any = ((globalThis as any)?.Array?.isArray(group?.items)) ? group.items : [];
+          const IL = (itemsArr && typeof itemsArr.length === 'number') ? itemsArr.length : 0;
+          const itemNodes: any = [] as any;
+          for (let j = 0; j < IL; j++) {
+            const item: any = itemsArr[j];
+            (itemNodes as any).push(
+              <span class="inline-flex items-center rounded-full border-2 border-default bg-background px-3 py-1 text-sm font-medium text-secondary shadow-sm hover:bg-background-offset transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/40" aria-label={`Compétence ${item}`}> 
+                {item}
+              </span>
+            );
+          }
+          (nodes as any).push(
+            <div class="p-5 bg-background-offset shadow-lg rounded-xl border border-default" aria-label={`Groupe de compétences: ${category}`}>
+              <h3 class="text-2xl font-semibold text-foreground mb-3 text-center">{category}</h3>
+              <div class="flex flex-wrap gap-2 justify-center">{itemNodes}</div>
+            </div>
+          );
+        }
+        return nodes as any;
+      })()}
+    </div>
+  </div>
+)}

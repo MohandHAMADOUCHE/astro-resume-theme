@@ -1,6 +1,18 @@
 ---
 import CardListSection from './CardListSection.astro';
 import { education } from '../../../config/cv.json';
----
+// Inline lightweight localizer to avoid module resolution issues
+import type { Locale } from '../../../i18n/ui';
+import { t } from '../../../i18n/ui';
 
-<CardListSection title="Education" items={education} />
+interface Props { locale?: Locale; showDetails?: boolean }
+const { locale = 'fr', showDetails = true } = Astro.props as Props;
+const localizeList = (list: any, loc: string, keys: any) => ((globalThis.Array?.isArray(list)) ? list : []).map((item: any) => {
+	const out: any = { ...item };
+	const K: any = keys as any; const L = (K && typeof K.length === 'number') ? K.length : 0;
+	for (let i = 0; i < L; i++) { const k = K[i]; out[k] = loc === 'en' ? (item?.[`${k}_en`] ?? item?.[k]) : item?.[k]; }
+	return out;
+});
+const items = localizeList(education as any, locale as any, ['title','sub_title','details']);
+---
+<CardListSection title={t(locale, 'education', 'Education')} items={items} showDetails={showDetails} />

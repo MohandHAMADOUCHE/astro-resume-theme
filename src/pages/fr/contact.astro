@@ -1,0 +1,105 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { t } from '../../i18n/ui';
+import AnyIcon from '../../components/common/AnyIcon.astro';
+import cv from '../../config/cv.json';
+const basic: any = (cv as any)?.basic ?? {};
+---
+
+<Layout title="Contact" lang="fr">
+  <section class="py-12 bg-background">
+  <div class="container mx-auto px-6 max-w-6xl">
+  <h1 class="text-3xl font-bold tracking-tight text-default">{t('fr','contactTitle','Me contacter')}</h1>
+      <p class="mt-2 text-offset">{t('fr','contactSubtitle','Envoyez-moi un message et je vous répondrai vite.')}</p>
+
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-12 gap-8 items-start">
+        <div class="sm:col-span-7 sm:order-2">
+          <form id="contact_form_fr" name="contact-fr" method="POST" action={`https://formsubmit.co/${basic?.email}`} class="space-y-6 bg-background-offset p-6 rounded-xl border border-border">
+            <input type="hidden" name="_subject" value="Nouveau message - formulaire de contact" />
+            <input type="hidden" name="_captcha" value="true" />
+            <p class="hidden" aria-hidden="true">
+              <label>Ne remplissez pas ceci: <input name="website" tabindex="-1" autocomplete="off" /></label>
+            </p>
+            <div>
+              <label class="block text-sm font-medium mb-1 text-default" for="name">{t('fr','nameLabel','Nom')} <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> obligatoire</span></label>
+              <input id="name" name="name" type="text" required class="w-full rounded border border-border bg-transparent text-default placeholder:text-default/70 caret-primary px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/40" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1 text-default" for="email">{t('fr','emailLabel','Email')} <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> obligatoire</span></label>
+              <input id="email" name="email" type="email" required class="w-full rounded border border-border bg-transparent text-default placeholder:text-default/70 caret-primary px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/40" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1 text-default" for="message">{t('fr','messageLabel','Message')} <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> obligatoire</span></label>
+              <textarea id="message" name="message" rows="6" required class="w-full rounded border border-border bg-transparent text-default placeholder:text-default/70 caret-primary px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/40"></textarea>
+            </div>
+            <div id="messageBoxFr" class="hidden text-sm"></div>
+            <div class="flex justify-center">
+              <button type="submit" class="inline-flex items-center justify-center px-6 py-3 text-base text-white font-semibold transition-all duration-200 rounded bg-primary hover:bg-secondary focus:bg-secondary retro-cta">
+                {t('fr','send','Envoyer')}
+              </button>
+            </div>
+          </form>
+        </div>
+  <aside class="sm:col-span-5 sm:order-1">
+          <div class="relative group overflow-hidden rounded-xl">
+            <!-- Image floutée par défaut -->
+      <img src="/images/phd-2.png" alt="Illustration de la thèse" loading="lazy"
+                 class="block w-full h-auto transition-transform duration-500 ease-out blur-md group-hover:scale-105" />
+            <!-- Zone centrale nette au survol -->
+      <img src="/images/phd-2.png" alt="" aria-hidden="true"
+                 class="pointer-events-none absolute inset-0 w-full h-full object-contain opacity-0 group-hover:opacity-100 transition duration-500 ease-out transform group-hover:scale-105 [mask-image:radial-gradient(circle_at_center,white_0%,white_45%,transparent_70%)]" />
+          </div>
+          <div class="mt-[5px] space-y-3 rounded-xl p-4">
+            <a href={`mailto:${basic?.email}`} class="flex w-full items-center gap-3 text-default hover:text-primary focus:text-primary">
+              <AnyIcon name="tabler:mail" class="size-5" aria-hidden="true" />
+              <span class="break-all md:break-words">{basic?.email}</span>
+            </a>
+            
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+<script is:inline>
+  const formFr = document.getElementById('contact_form_fr');
+  const boxFr = document.getElementById('messageBoxFr');
+
+  if (formFr) {
+    formFr.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const honeypotEl = formFr.querySelector('input[name="website"]');
+      const honeypot = honeypotEl && honeypotEl.value ? honeypotEl.value : '';
+      if (honeypot) {
+        boxFr && boxFr.classList.remove('hidden','text-red-600');
+        boxFr && boxFr.classList.add('text-green-600');
+        if (boxFr) boxFr.textContent = 'Merci !';
+        if (typeof formFr.reset === 'function') formFr.reset();
+        return;
+      }
+
+      const data = new FormData(formFr);
+      const action = formFr.getAttribute('action') || '';
+      try {
+        const resp = await fetch(action, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: data
+        });
+        if (resp.ok) {
+          boxFr && boxFr.classList.remove('hidden','text-red-600');
+          boxFr && boxFr.classList.add('text-green-600');
+          if (boxFr) boxFr.textContent = 'Votre message a bien été envoyé !';
+          if (typeof formFr.reset === 'function') formFr.reset();
+        } else {
+          throw new Error('Request failed');
+        }
+      } catch (err) {
+        boxFr && boxFr.classList.remove('hidden','text-green-600');
+        boxFr && boxFr.classList.add('text-red-600');
+        if (boxFr) boxFr.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+      }
+    });
+  }
+</script>
+</Layout>

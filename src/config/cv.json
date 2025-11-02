@@ -1,86 +1,225 @@
 {
     "basic": {
-        "name": "Paul Smith",
-        "job": "Software Engineer",
-        "summary": "Transforming challenges into opportunities with cutting-edge technology. Driven by a love for elegant, robust code.",
-        "cv_file_name": "paul_cv.pdf"
+    "name": "Mohand HAMADOUCHE",
+    "job": "Ingénieur DevOps",
+                "summary": "Transformer les défis en opportunités grâce aux technologies de pointe. Animé par le goût du code élégant et robuste.",
+    "about": "Bienvenue — Je suis Mohand HAMADOUCHE, ingénieur DevOps avec une approche cloud‑native. Je conçois des chaînes de livraison fiables (CI/CD), une infrastructure reproductible (IaC) et des plateformes scalables avec Kubernetes et GitOps. Sécurité, observabilité et automatisation d’abord.\n\nSur ce site, je partage des solutions à des problèmes concrets — ce qui a marché, ce qui n’a pas marché, et les compromis. Vous trouverez aussi des projets réalisés, des notes issues de ma thèse sur les systèmes distribués, et des expérimentations autour des outils DevOps.\n\nParcourez le blog et les projets, et contactez‑moi si vous souhaitez échanger sur les pratiques DevOps, des architectures Cloud, ou une collaboration.",
+        "avatar": "/images/mohand_hamadouche.png",
+        "email": "contact@mohand-hamadouche.info",
+        "cv_file_name": "CV_2025_DevOps.pdf",
+        "hasPhD": true,
+        "locales": {
+            "en": {
+                "job": "DevOps Engineer",
+                "summary": "Transforming challenges into opportunities with cutting-edge technology. Driven by a love for elegant, robust code.",
+                "about": "Welcome — I’m Mohand HAMADOUCHE, a DevOps engineer with a cloud‑native mindset. I build reliable delivery pipelines (CI/CD), reproducible infrastructure (IaC), and scalable platforms with Kubernetes and GitOps. Security, observability, and automation‑first are my defaults.\n\nThis website is where I document solutions to real problems I encounter — what worked, what didn’t, and the trade‑offs. You’ll also find projects I’ve built, notes from my PhD work on distributed systems, and experiments across DevOps tooling.\n\nFeel free to explore the blog and projects, and reach out if you’d like to discuss DevOps practices, Cloud architectures, or collaboration."
+            }
+        }
     },
     "experiences": [
         {
-            "title": "Senior Software Engineer",
-            "sub_title": "Tech Solutions Inc.",
-            "years": "2021 - Present",
-            "details": "Led the development of a scalable e-commerce platform that increased sales by 30%. Worked with modern technologies including React, Node.js, and AWS."
+            "title": "Ingénieur DevOps & IA - Projet AID (RESSACH)",
+            "sub_title": "Lab-STICC / Projet ANR RESSACH",
+            "years": "09/2024 - 08/2025",
+            "details": "Conception et implémentation de pipelines CI/CD (GitLab CI) pour l'entraînement, la conteneurisation (Docker) et le test de modèles IA; automatisation du déploiement via Ansible; intégration de Trivy et SonarQube; mise en place de GitOps avec Argo CD sur Kubernetes; accompagnement des équipes sur les pratiques DevOps.",
+            "title_en": "DevOps & AI Engineer – AID Project (RESSACH)",
+            "sub_title_en": "Lab-STICC / ANR RESSACH Project",
+            "details_en": "Designed and implemented CI/CD pipelines (GitLab CI) for AI model training, containerization (Docker), and testing; automated deployment with Ansible; integrated Trivy and SonarQube; established GitOps with Argo CD on Kubernetes; coached teams on DevOps practices."
         },
         {
-            "title": "Software Engineer",
-            "sub_title": "Innovate Labs",
-            "years": "2018 - 2021",
-            "details": "Developed and maintained web applications for various clients. Key contributor in migrating legacy systems to cloud infrastructure."
+            "title": "Doctorant / Doctorat en Informatique et Architecture Numérique",
+            "sub_title": "UBO (Université de Bretagne Occidentale)",
+            "years": "10/2019 - 02/2024",
+            "details": "Thèse: 'Distributed decision-making in multi-UAV systems' — conception de méthodes distribuées pour flottes de drones, modélisation et simulation, et mise en place d'infrastructures DevOps (GitLab CI, Docker) pour automatiser des campagnes massives de simulations et l'analyse des résultats.",
+            "title_en": "PhD Candidate / PhD in Computer Science and Digital Architecture",
+            "sub_title_en": "UBO (University of Western Brittany)",
+            "details_en": "Thesis: 'Distributed decision-making in multi-UAV systems' — designed distributed methods for drone fleets, performed modeling and simulation, and set up DevOps infrastructure (GitLab CI, Docker) to automate large-scale simulation campaigns and results analysis."
         },
         {
-            "title": "Junior Developer",
-            "sub_title": "Creative Apps Studio",
-            "years": "2015 - 2018",
-            "details": "Worked on mobile app development, collaborating with design teams to create user-friendly applications."
+            "title": "Ingénieur de recherche & DevOps",
+            "sub_title": "ICMC - USP (São Carlos, BR)",
+            "years": "06/2022 - 08/2022",
+            "details": "Conteneurisation d'environnements de simulation avec Docker/docker-compose; automatisation des déploiements et des tests via scripts Bash et outils Python; amélioration des workflows de versioning et documentation technique.",
+            "title_en": "Research Engineer & DevOps",
+            "sub_title_en": "ICMC - USP (São Carlos, BR)",
+            "details_en": "Containerized simulation environments with Docker/docker-compose; automated deployments and testing via Bash scripts and Python tools; improved versioning workflows and technical documentation."
+        },
+        {
+            "title": "Ingénieur en Systèmes Embarqués & DevOps",
+            "sub_title": "Lab-STICC",
+            "years": "02/2019 - 07/2019",
+            "details": "Développement C++/Python pour système de navigation autonome (SLAM); mise en place CI avec Jenkins & GitLab CI; intégration de tests et SonarQube; déploiement et tests sur cible NVIDIA Jetson.",
+            "title_en": "Embedded Systems & DevOps Engineer",
+            "sub_title_en": "Lab-STICC",
+            "details_en": "C++/Python development for an autonomous navigation system (SLAM); set up CI with Jenkins & GitLab CI; integrated tests and SonarQube; deployment and testing on an NVIDIA Jetson target."
+        },
+        {
+            "title": "Stagiaire en Développement web",
+            "sub_title": "Association des diabétiques",
+            "years": "04/2016 - 06/2016",
+            "details": "Développement d'une application web pour la gestion des membres; automatisation des déploiements et sauvegardes; gestion de versions avec Git.",
+            "title_en": "Web Development Intern",
+            "sub_title_en": "Diabetics Association",
+            "details_en": "Developed a web application for member management; automated deployments and backups; version control with Git."
         }
     ],
     "education": [
         {
-            "title": "Bachelor of Science in Computer Science",
-            "sub_title": "University of Modern Tech",
-            "years": "2015 - 2019",
-            "details": "Graduated with honors. Specialized in software development, data structures, and algorithms. Worked on various open-source projects and completed internships in tech companies."
+            "title": "Doctorat en Informatique et Architecture Numérique",
+            "sub_title": "UBO – Université de Bretagne Occidentale (Brest, FR)",
+            "years": "2019 - 2024",
+            "details": "Thèse: 'Distributed decision-making in multi-UAV systems' — décision distribuée pour flottes de drones; modélisation/simulation; pipelines CI/CD pour des campagnes massives.",
+            "title_en": "PhD in Computer Science and Digital Architecture",
+            "sub_title_en": "UBO – University of Western Brittany (Brest, FR)",
+            "details_en": "Thesis: 'Distributed decision-making in multi-UAV systems' — distributed decision-making for drone fleets; modeling/simulation; CI/CD pipelines for large-scale campaigns.",
+            "thesisUrl": "https://theses.hal.science/tel-04639020/file/These-2024-Informatique_et_architectures_numeriques-HAMADOUCHE_Mohand.pdf"
         },
         {
-            "title": "Master of Science in Software Engineering",
-            "sub_title": "Global Tech Institute",
-            "years": "2019 - 2021",
-            "details": "Focused on advanced algorithms, cloud computing, and full-stack development. Published research papers on scalable microservices architecture."
+            "title": "Master 2 – Systèmes Embarqués / Systèmes Intégrés",
+            "sub_title": "UBS – Université Bretagne Sud (Lorient, FR)",
+            "years": "2017 - 2019",
+            "details": "Spécialisation en systèmes embarqués et intégrés.",
+            "title_en": "Master's Degree (M2) – Embedded Systems / Integrated Systems",
+            "sub_title_en": "UBS – University of South Brittany (Lorient, FR)",
+            "details_en": "Specialization in embedded and integrated systems."
+        },
+        {
+            "title": "Licence en Informatique",
+            "sub_title": "UMMTO – Université Mouloud Mammeri (Tizi Ouzou, DZ)",
+            "years": "2013 - 2016",
+            "details": "Parcours informatique général.",
+            "title_en": "Bachelor’s Degree in Computer Science",
+            "sub_title_en": "UMMTO – Mouloud Mammeri University (Tizi Ouzou, DZ)",
+            "details_en": "General computer science curriculum."
         }
     ],
     "projects": [
         {
-            "imageUrl": "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?q=80&w=764&auto=format&fit=crop",
-            "title": "hello.com",
-            "type": "Website",
-            "link": "https://github.com/wasutz/astro-resume-theme"
+            "imageUrl": "/images/iac.png",
+            "title": "IaC & déploiement de cluster k3s",
+            "type": "Homelab / Infra",
+            "link": "",
+            "description": "Pipeline complet IaC pour déployer un cluster k3s : images de VM standardisées (Packer), provisioning déclaratif avec Terraform, et configuration automatisée des nœuds via Ansible. Optimisé pour reprise et montée en charge.",
+            "title_en": "IaC & k3s cluster deployment",
+            "type_en": "Homelab / Infra",
+            "description_en": "End-to-end IaC pipeline to deploy a k3s cluster: standardized VM images (Packer), declarative provisioning with Terraform, and automated node configuration using Ansible. Optimized for recovery and scale-up."
         },
         {
-            "imageUrl": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=764&auto=format&fit=crop",
-            "title": "Paul UI kit collections",
-            "type": "UI Kit",
-            "link": "https://github.com/wasutz/astro-resume-theme"
+            "imageUrl": "/images/gitlab.png",
+            "title": "Forge GitLab auto‑hébergée & CI/CD",
+            "type": "Homelab / CI",
+            "link": "",
+            "description": "Instance GitLab auto‑hébergée incluant registre d'images et pipelines CI/CD sécurisés : build, tests, analyse vulnérabilités (Trivy) et publication d'artefacts. Mise en place des stratégies de branches et revue automatisée.",
+            "title_en": "Self-hosted GitLab forge & CI/CD",
+            "type_en": "Homelab / CI",
+            "description_en": "Self-hosted GitLab with container registry and secure CI/CD pipelines: build, tests, vulnerability scanning (Trivy), and artifact publishing. Branch strategies and automated review policies included."
         },
         {
-            "imageUrl": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=764&auto=format&fit=crop",
-            "title": "paul.com",
-            "type": "Website",
-            "link": "https://github.com/wasutz/astro-resume-theme"
+            "imageUrl": "/images/gitops-with-argocd.png",
+            "title": "Chaîne GitOps avec Argo CD",
+            "type": "Homelab / GitOps",
+            "link": "",
+            "description": "GitOps pour déploiement continu : manifests applicatifs stockés en Git, synchronisation automatique via Argo CD, rollback testés et stratégies de promotion entre environnements (staging → prod).",
+            "title_en": "GitOps pipeline with Argo CD",
+            "type_en": "Homelab / GitOps",
+            "description_en": "Continuous delivery with GitOps: application manifests stored in Git, automatic sync via Argo CD, tested rollbacks, and promotion strategies across environments (staging → prod)."
+        },
+        {
+            "imageUrl": "/images/prometheus-grafana.png",
+            "title": "Stack d'observabilité (Prometheus / Grafana / Loki)",
+            "type": "Homelab / Observabilité",
+            "link": "",
+            "description": "Stack d’observabilité complète pour cluster et applications : métriques (Prometheus), dashboards (Grafana), logs centralisés (Loki), alerting et tableaux de bord opérationnels pour SLO/SLI.",
+            "title_en": "Observability stack (Prometheus / Grafana / Loki)",
+            "type_en": "Homelab / Observability",
+            "description_en": "Complete observability stack for clusters and apps: metrics (Prometheus), dashboards (Grafana), centralized logs (Loki), alerting, and operational dashboards for SLO/SLI."
         }
     ],
-    "menuItems": [
-        {
-            "name": "About",
-            "link": "/"
-        },
-        {
-            "name": "Blog",
-            "link": "/blogs"
+    "display": {
+        "experience": {
+            "showDetails": {
+                "fr": false,
+                "en": false
+            }
         }
+    },
+    "menuItems": [
+        { "name": "About",      "name_fr": "À propos",     "link": "/about",     "href": "/about",     "href_fr": "/fr/about" },
+        { "name": "Skills",     "name_fr": "Compétences",  "link": "/skills",    "href": "/skills",    "href_fr": "/fr/skills" },
+        { "name": "Experience", "name_fr": "Expérience",   "link": "/experience", "href": "/experience", "href_fr": "/fr/experience" },
+        { "name": "Education",  "name_fr": "Éducation",    "link": "/education", "href": "/education", "href_fr": "/fr/education" },
+        { "name": "Portfolio",  "name_fr": "Portfolio",    "link": "/portfolio", "href": "/portfolio", "href_fr": "/fr/portfolio" },
+        { "name": "Contact",    "name_fr": "Contact",      "link": "/contact",   "href": "/contact",   "href_fr": "/fr/contact" },
+        { "name": "Blog",       "name_fr": "Blog",         "link": "https://blog.mohand-hamadouche.info", "href": "/404", "href_fr": "/404" }
     ],
     "socialLinks": [
         {
-            "iconName": "Github",
-            "link": "https://github.com/wasutz/astro-resume-theme"
+            "iconName": "tabler:brand-linkedin",
+            "link": "https://www.linkedin.com/in/mohand-hamadouche/"
         },
         {
-            "iconName": "Facebook",
-            "link": "https://facebook.com"
+            "iconName": "tabler:brand-github",
+            "link": "https://github.com/MohandHAMADOUCHE"
         },
         {
-            "iconName": "Instagram",
-            "link": "https://instagram.com"
+            "iconName": "tabler:brand-twitter",
+            "link": "https://x.com/HAMADOUCHE_MHD"
+        }
+    ],
+    "skills": [
+        {
+            "category": "DevOps & Automatisation",
+            "items": ["CI/CD (Jenkins, GitLab CI)", "Ansible", "Terraform", "Packer", "Git", "GitHub", "GitLab"],
+            "category_en": "DevOps & Automation",
+            "items_en": ["CI/CD (Jenkins, GitLab CI)", "Ansible", "Terraform", "Packer", "Git", "GitHub", "GitLab"]
+        },
+        {
+            "category": "Conteneurisation & Orchestration",
+            "items": ["Docker", "DockerHub", "Kubernetes", "Argo CD"],
+            "category_en": "Containerization & Orchestration",
+            "items_en": ["Docker", "DockerHub", "Kubernetes", "Argo CD"]
+        },
+        {
+            "category": "Cloud & Virtualisation",
+            "items": ["AWS (EC2, EKS, S3, IAM, VPC)", "Proxmox", "VMware"],
+            "category_en": "Cloud & Virtualization",
+            "items_en": ["AWS (EC2, EKS, S3, IAM, VPC)", "Proxmox", "VMware"]
+        },
+        {
+            "category": "Monitoring & Sécurité",
+            "items": ["Prometheus", "Grafana", "Trivy", "SonarQube", "OpenSSL", "Firewall"],
+            "category_en": "Monitoring & Security",
+            "items_en": ["Prometheus", "Grafana", "Trivy", "SonarQube", "OpenSSL", "Firewall"]
+        },
+        {
+            "category": "Scripting & Langages",
+            "items": ["Python", "Bash", "Shell Linux", "Powershell", "C", "C++", "Java"],
+            "category_en": "Scripting & Languages",
+            "items_en": ["Python", "Bash", "Linux Shell", "PowerShell", "C", "C++", "Java"]
+        },
+        {
+            "category": "Systèmes & Réseaux",
+            "items": ["CentOS 7", "Debian", "Ubuntu", "TCP/UDP", "DNS", "SSH", "SSL/TLS"],
+            "category_en": "Systems & Networks",
+            "items_en": ["CentOS 7", "Debian", "Ubuntu", "TCP/UDP", "DNS", "SSH", "SSL/TLS"]
+        },
+        {
+            "category": "Bases de données & Serveurs",
+            "items": ["MySQL", "PostgreSQL", "Apache 2.4", "Tomcat 8"],
+            "category_en": "Databases & Servers",
+            "items_en": ["MySQL", "PostgreSQL", "Apache 2.4", "Tomcat 8"]
+        },
+        {
+            "category": "Data Science & IA",
+            "items": ["Sklearn", "NumPy", "Pandas", "TensorFlow", "Keras", "ONNX"],
+            "category_en": "Data Science & AI",
+            "items_en": ["Sklearn", "NumPy", "Pandas", "TensorFlow", "Keras", "ONNX"]
+        },
+        {
+            "category": "Méthodologies",
+            "items": ["Agile (Scrum)"],
+            "category_en": "Methodologies",
+            "items_en": ["Agile (Scrum)"]
         }
     ]
 }

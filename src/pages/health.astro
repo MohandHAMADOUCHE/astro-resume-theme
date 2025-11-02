@@ -1,0 +1,26 @@
+---
+import Layout from "../layouts/Layout.astro";
+const title = "Health";
+---
+
+<Layout title={title}>
+  <section class="mx-auto max-w-3xl px-6 py-12">
+    <h1 class="text-3xl font-semibold tracking-tight">{title}</h1>
+    <p class="mt-2 text-white/70">Build metadata injected by CI.</p>
+
+    <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
+        <div class="text-sm text-white/60">Branch</div>
+        <div class="text-lg font-mono"><code>__BRANCH__</code></div>
+      </div>
+      <div class="rounded-lg border border-white/10 bg-white/5 p-4">
+        <div class="text-sm text-white/60">Commit</div>
+        <div class="text-lg font-mono"><code>__COMMIT__</code></div>
+      </div>
+    </div>
+
+    <p class="mt-6 text-sm text-white/50">
+      This page mirrors the test project’s health metadata. Values are replaced during the CI deploy step.
+    </p>
+  </section>
+</Layout>

@@ -1,20 +1,34 @@
-const themes = ['dark', 'light'];
+const themes = ['light', 'dark', 'retrowave'] as const;
+type ThemePref = typeof themes[number];
 
-const getCurrentTheme = () => document.documentElement.dataset.theme;
+const getSavedTheme = (): ThemePref => {
+    const saved = localStorage.getItem('theme') as ThemePref | null;
+    if (saved && themes.includes(saved)) return saved;
+    // Default to system-like behavior: respect OS on first load
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initial = prefersDark ? 'dark' : 'light';
+    localStorage.setItem('theme', initial);
+    return initial;
+};
 
-export const getNextTheme = () => {
-    const currentTheme = getCurrentTheme();
-    const indexThemeCurrent = themes.indexOf(currentTheme || 'dark');
+export const getNextTheme = (): ThemePref => {
+    const saved = getSavedTheme();
+    const index = themes.indexOf(saved);
+    return themes[(index + 1) % themes.length];
+};
 
-    return themes[(indexThemeCurrent + 1) % themes.length];
+export const applyTheme = (pref?: ThemePref) => {
+    const p = pref ?? getSavedTheme();
+    document.documentElement.dataset.theme = p;
 };
 
 export const updateToggleThemeIcon = () => {
-    const currentTheme = getCurrentTheme();
-    document.querySelector(`#icon-theme-${currentTheme}`)?.classList.add("hidden");
-
-    const themeNext = getNextTheme();
-    document.querySelector(`#icon-theme-${themeNext}`)?.classList.remove("hidden");
+    // Hide all icons first
+    document.querySelectorAll('#icon-theme-light, #icon-theme-dark, #icon-theme-retrowave')
+        .forEach(el => el.classList.add('hidden'));
+    // Show next icon (what will be applied on click)
+    const next = getNextTheme();
+    document.querySelector(`#icon-theme-${next}`)?.classList.remove('hidden');
 };
 
 export const toggleMarkdownTheme = (newTheme: string) => {
@@ -23,7 +37,7 @@ export const toggleMarkdownTheme = (newTheme: string) => {
         return;
     }
 
-    if (newTheme === "dark") {
+    if (newTheme === "dark" || newTheme === 'retrowave') {
         contentElement.classList.add('prose-invert');
     } else {
         contentElement.classList.remove('prose-invert');

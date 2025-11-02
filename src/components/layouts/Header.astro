@@ -1,50 +1,91 @@
 ---
-import { Icon } from "astro-icon/components";
+import AnyIcon from "../common/AnyIcon.astro";
 import ThemeToggle from "../common/ThemeToggle.astro";
 import { basic, menuItems } from "../../config/cv.json";
+const path = Astro.url.pathname;
+const isHome = path === '/' || path === '/fr' || path === '/fr/';
+// Simple locale flag without using string helpers
+const isFR = !!path && path[0] === '/' && path[1] === 'f' && path[2] === 'r';
+
+// No-loop variant: pick first items from cv.json directly (edit cv.json to add/remove)
+const M: any = (menuItems as any) ?? [];
+const m0: any = M[0] ?? null;
+const m1: any = M[1] ?? null;
+const m2: any = M[2] ?? null;
+const m3: any = M[3] ?? null;
+const m4: any = M[4] ?? null;
+const m5: any = M[5] ?? null;
+const m6: any = M[6] ?? null;
+const m7: any = M[7] ?? null;
+
+const itemLabel = (it: any) => (isFR ? (it?.name_fr ?? it?.name ?? '') : (it?.name ?? ''));
+const itemHref = (it: any) => (isFR ? (it?.href_fr ?? it?.href ?? '#') : (it?.href ?? '#'));
 ---
 
 <header class="bg-background py-4">
   <div class="container max-w-6xl mx-auto flex justify-between items-center px-4 md:px-8">
     <!-- Logo -->
     <div class="text-2xl font-bold">
-      <a href="/" class="hover:text-offset">{basic?.name}</a>
+      {!isHome && (
+        <a href="/" class="retro-title-hover">{basic?.name}</a>
+      )}
     </div>
 
-    <div class="flex gap-5">
+  <div class="flex gap-5 items-center">
       <!-- PC Menu -->
       <nav class="hidden sm:flex space-x-6 items-center">
-        {menuItems.map((item) => (
-          <a href={item.link} class="hover:text-offset">{item.name}</a>
-        ))}
+        {m0 ? (<a href={itemHref(m0)} class="hover:text-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m0)}</a>) : null}
+        {m1 ? (<a href={itemHref(m1)} class="hover:text-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m1)}</a>) : null}
+        {m2 ? (<a href={itemHref(m2)} class="hover:text-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m2)}</a>) : null}
+        {m3 ? (<a href={itemHref(m3)} class="hover:text-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m3)}</a>) : null}
+        {m4 ? (<a href={itemHref(m4)} class="hover:text-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m4)}</a>) : null}
+        {m5 ? (<a href={itemHref(m5)} class="hover:text-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m5)}</a>) : null}
+        {m6 ? (<a href={itemHref(m6)} class="hover:text-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m6)}</a>) : null}
+        {m7 ? (<a href={itemHref(m7)} class="hover:text-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m7)}</a>) : null}
       </nav>
 
       <!-- Mobile Menu Button -->
       <div class="sm:hidden flex">
         <button id="menu-btn" class="focus:outline-none" aria-label="Mobile open menu">
-          <Icon name="Menu" class="size-6"/>
+          <AnyIcon name="Menu" class="size-6"/>
         </button>
       </div>
 
       <ThemeToggle />
+
+      <!-- Lang Icons next to ThemeToggle (desktop + mobile) -->
+      <div class="flex items-center gap-2">
+        <a href="/fr/" class={`p-1 rounded hover:bg-background-offset ${isFR ? 'text-secondary' : ''}`} aria-label="Français">
+          <AnyIcon name="flag-fr" class="size-5" aria-hidden="true" />
+        </a>
+        <a href="/" class={`p-1 rounded hover:bg-background-offset ${!isFR ? 'text-secondary' : ''}`} aria-label="English">
+          <AnyIcon name="flag-us" class="size-5" aria-hidden="true" />
+        </a>
+      </div>
     </div>
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden sm:hidden">
-    {menuItems.map((item) => (
-      <a href={item.link} class="block px-4 py-2 hover:bg-background-offset">
-        {item.name}
-      </a>
-    ))}
+  <div id="mobile-menu" class="hidden sm:hidden bg-background-offset border-t border-border">
+    <!-- Mobile links -->
+    {m0 ? (<a href={itemHref(m0)} class="block px-4 py-2 hover:bg-background-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m0)}</a>) : null}
+    {m1 ? (<a href={itemHref(m1)} class="block px-4 py-2 hover:bg-background-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m1)}</a>) : null}
+    {m2 ? (<a href={itemHref(m2)} class="block px-4 py-2 hover:bg-background-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m2)}</a>) : null}
+    {m3 ? (<a href={itemHref(m3)} class="block px-4 py-2 hover:bg-background-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m3)}</a>) : null}
+    {m4 ? (<a href={itemHref(m4)} class="block px-4 py-2 hover:bg-background-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m4)}</a>) : null}
+    {m5 ? (<a href={itemHref(m5)} class="block px-4 py-2 hover:bg-background-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m5)}</a>) : null}
+    {m6 ? (<a href={itemHref(m6)} class="block px-4 py-2 hover:bg-background-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m6)}</a>) : null}
+    {m7 ? (<a href={itemHref(m7)} class="block px-4 py-2 hover:bg-background-offset bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_2px] bg-no-repeat bg-[position:50%_100%] transition-[background-size] duration-300 hover:bg-[length:100%_2px]">{itemLabel(m7)}</a>) : null}
   </div>
 </header>
 
-<script>
+<script is:inline>
   const menuBtn = document.getElementById('menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
-
-  menuBtn?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
-  });
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+  // If either element is missing, nothing happens—safe no-op
 </script>

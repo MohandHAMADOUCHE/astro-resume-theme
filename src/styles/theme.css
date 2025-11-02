@@ -17,3 +17,175 @@
     --color-background-offset: theme("colors.gray.800");
     --color-border: theme("colors.gray.50" / 10%);
 }
+
+/* Retrowave theme: neon pink/purple on dark background */
+[data-theme="retrowave"] {
+    /* Neon magenta + cyan palette (as validated) */
+    --color-primary: #ff00cc; /* neon magenta */
+    --color-secondary: #00f0ff; /* electric cyan */
+    --color-text: #fff3fb; /* near-white with a pink cast */
+    --color-text-offset: #f7a8e8; /* soft pastel pink */
+    --color-background: #0d0018; /* deep violet night */
+    --color-background-offset: #1a0230; /* panel shade */
+    --color-border: rgba(255, 0, 204, 0.28); /* magenta glow tint */
+}
+
+/* Retrowave extras: subtle neon vibes */
+[data-theme="retrowave"] body {
+    background-color: var(--color-background);
+    background-image:
+        radial-gradient(60rem 30rem at 20% 10%, rgba(255, 0, 204, 0.14), transparent 40%),
+        radial-gradient(40rem 20rem at 80% 30%, rgba(0, 240, 255, 0.12), transparent 35%),
+        radial-gradient(50rem 25rem at 40% 80%, rgba(122, 92, 255, 0.12), transparent 45%);
+    background-attachment: fixed;
+}
+
+/* Inputs and interactive elements: neon focus */
+[data-theme="retrowave"] input,
+[data-theme="retrowave"] textarea,
+[data-theme="retrowave"] select {
+    outline: none;
+    transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+[data-theme="retrowave"] input:focus,
+[data-theme="retrowave"] textarea:focus,
+[data-theme="retrowave"] select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 60%, transparent),
+                0 0 16px color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+
+/* Primary buttons get a glow */
+[data-theme="retrowave"] .bg-primary {
+    box-shadow: 0 0 12px color-mix(in srgb, var(--color-primary) 45%, transparent);
+}
+[data-theme="retrowave"] .hover\:bg-secondary:hover {
+    box-shadow: 0 0 16px color-mix(in srgb, var(--color-secondary) 45%, transparent);
+}
+
+/* Make default links pop a bit without overriding utility classes */
+[data-theme="retrowave"] a:not([class*="text-"]):not([class*="hover:text-"]) {
+    color: var(--color-secondary);
+}
+
+/* Retrowave: permanent gradient for job title in Hero */
+[data-theme="retrowave"] .hero-job {
+    display: inline-block;
+    background: linear-gradient(180deg, var(--color-secondary), var(--color-primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    text-shadow:
+        0 0 6px color-mix(in srgb, var(--color-secondary) 30%, transparent),
+        0 0 14px color-mix(in srgb, var(--color-primary) 22%, transparent);
+}
+
+/* Retrowave: CTA button matches retro-card style */
+[data-theme="retrowave"] .retro-cta {
+    border: 1px solid transparent;
+    /* Reduce pink dominance on the right and steer towards violet */
+    background:
+        /* Diagonal fill gradient */
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--color-primary) 15%, #7a5cff 85%),
+            color-mix(in srgb, var(--color-secondary) 55%, #7a5cff 45%)
+        ) padding-box,
+        linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--color-primary) 60%, #7a5cff 40%),
+            color-mix(in srgb, var(--color-secondary) 70%, #7a5cff 30%)
+        ) border-box;
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.35),
+        0 0 14px color-mix(in srgb, #7a5cff 50%, transparent),
+        0 0 10px color-mix(in srgb, var(--color-secondary) 25%, transparent);
+}
+
+[data-theme="retrowave"] .retro-cta:hover,
+[data-theme="retrowave"] .retro-cta:focus {
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.4),
+        0 0 24px color-mix(in srgb, #7a5cff 55%, transparent),
+        0 0 18px color-mix(in srgb, var(--color-secondary) 35%, transparent);
+}
+
+/* Retrowave: gradient title like neon heading */
+[data-theme="retrowave"] .retro-title {
+        background: linear-gradient(180deg, var(--color-secondary), var(--color-primary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    -webkit-text-fill-color: transparent; /* ensure gradient text works on WebKit */
+        text-shadow:
+            0 0 8px color-mix(in srgb, var(--color-secondary) 40%, transparent),
+            0 0 18px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+/* Retrowave: hover-only variant for headings (e.g., hero name) */
+[data-theme="retrowave"] .retro-title-hover {
+    transition: color .2s ease, text-shadow .2s ease;
+    display: inline-block;
+}
+
+[data-theme="retrowave"] .retro-title-hover:hover,
+[data-theme="retrowave"] .retro-title-hover:focus,
+[data-theme="retrowave"] .retro-title-hover:focus-visible {
+    background: linear-gradient(180deg, var(--color-secondary), var(--color-primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent; /* ensure gradient text works on WebKit */
+    text-shadow:
+        0 0 8px color-mix(in srgb, var(--color-secondary) 40%, transparent),
+        0 0 18px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+/* Retrowave: card with subtle gradient border and panel glow */
+[data-theme="retrowave"] .retro-card {
+        border-radius: 1rem; /* 16px */
+        padding: 1.25rem; /* keep existing spacing via class too */
+        border: 1px solid transparent;
+        /* 50% transparent fill relative to background offset */
+        background:
+            linear-gradient(0deg,
+                color-mix(in srgb, var(--color-background-offset) 50%, transparent) 0%,
+                color-mix(in srgb, var(--color-background-offset) 50%, transparent) 100%
+            ) padding-box,
+            linear-gradient(135deg, color-mix(in srgb, var(--color-secondary) 45%, transparent), color-mix(in srgb, var(--color-primary) 45%, transparent)) border-box;
+        box-shadow:
+            0 8px 24px rgba(0,0,0,0.35),
+            0 0 24px color-mix(in srgb, var(--color-secondary) 18%, transparent);
+}
+
+/* Light mode: increase contrast for contact form containers so they don't blend with the background */
+[data-theme="light"] #contact_form,
+[data-theme="light"] #contact_form_fr {
+    /* Strengthen panel contrast vs page background */
+    background-color: color-mix(in srgb, var(--color-background-offset) 88%, black 12%);
+    /* More visible border in light */
+    border-color: color-mix(in srgb, var(--color-text) 22%, transparent);
+    /* Slightly stronger elevation */
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-text) 14%, transparent);
+}
+
+/* Light mode: inputs should not be transparent; give them a subtle fill and clearer borders */
+[data-theme="light"] #contact_form input,
+[data-theme="light"] #contact_form textarea,
+[data-theme="light"] #contact_form select,
+[data-theme="light"] #contact_form_fr input,
+[data-theme="light"] #contact_form_fr textarea,
+[data-theme="light"] #contact_form_fr select {
+    background-color: color-mix(in srgb, var(--color-background) 85%, white 15%) !important;
+    border-color: color-mix(in srgb, var(--color-text) 28%, transparent) !important;
+    color: var(--color-text) !important;
+}
+
+[data-theme="light"] #contact_form input::placeholder,
+[data-theme="light"] #contact_form textarea::placeholder,
+[data-theme="light"] #contact_form_fr input::placeholder,
+[data-theme="light"] #contact_form_fr textarea::placeholder {
+    color: var(--color-text-offset) !important;
+}

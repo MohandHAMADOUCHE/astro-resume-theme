@@ -1,33 +1,55 @@
 ---
-import { Icon } from 'astro-icon/components'
+import AnyIcon from './AnyIcon.astro';
 ---
 
 <button id="toggle-theme-button"
-    aria-label="Toggle dark mode"
-    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-background
-        text-text shadow-sm hover:bg-background-offset focus:outline-none focus:bg-background-offset">
-    <div id="icon-theme-light">
-        <Icon id='toggle-theme-icon' name={'Sun'} />
+    aria-label="Toggle theme"
+    class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border bg-default
+        text-default shadow-sm hover:bg-offset focus:outline-none focus:bg-offset">
+    <div id="icon-theme-light" class="hidden">
+    <AnyIcon name={'Sun'} />
     </div>
-    <div id="icon-theme-dark">
-        <Icon id='toggle-theme-icon' name={'Moon'} />
+    <div id="icon-theme-dark" class="hidden">
+    <AnyIcon name={'Moon'} />
     </div>
+    <div id="icon-theme-retrowave" class="hidden">
+    <AnyIcon name={'Retro'} />
+    </div>
+    <span class="sr-only" id="theme-next-label">Toggle theme</span>
+    
 </button>
 
-<script>
-    import { toggleMarkdownTheme, updateToggleThemeIcon } from "../../scripts/theme";
+<script is:inline>
+    (function(){
+            const button = document.getElementById('toggle-theme-button');
+            const iconLight = document.getElementById('icon-theme-light');
+            const iconDark = document.getElementById('icon-theme-dark');
+            const iconRetro = document.getElementById('icon-theme-retrowave');
 
-    const button = document.getElementById('toggle-theme-button');
-    const getCurrentTheme = () => document.documentElement.dataset.theme;
+            const applyTheme = (theme) => {
+                document.documentElement.dataset.theme = theme;
+                if (iconLight && iconDark && iconRetro) {
+                    iconLight.classList.add('hidden');
+                    iconDark.classList.add('hidden');
+                    iconRetro.classList.add('hidden');
+                    if (theme === 'light') iconLight.classList.remove('hidden');
+                    else if (theme === 'dark') iconDark.classList.remove('hidden');
+                    else iconRetro.classList.remove('hidden');
+                }
+            };
 
-    button?.addEventListener('click', () => {
-        const newTheme = getCurrentTheme() === 'dark' ? 'light' : 'dark';
+            const cycle = ['light','dark','retrowave'];
+            const getNextTheme = (cur) => cycle[(cycle.indexOf(cur) + 1) % cycle.length];
 
-        document.documentElement.dataset.theme = newTheme;
-        localStorage.setItem('theme', newTheme);
-        updateToggleThemeIcon();
-        toggleMarkdownTheme(newTheme);
-    });
+            const saved = localStorage.getItem('theme') || 'light';
+            localStorage.setItem('theme', saved);
+            applyTheme(saved);
 
-    updateToggleThemeIcon();
-</script>
+            button?.addEventListener('click', () => {
+                const current = document.documentElement.dataset.theme || 'light';
+                const next = getNextTheme(current);
+                localStorage.setItem('theme', next);
+                applyTheme(next);
+            });
+        })();
+    </script>

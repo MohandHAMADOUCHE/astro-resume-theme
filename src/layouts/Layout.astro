@@ -1,48 +1,91 @@
 ---
 import Header from '../components/layouts/Header.astro';
 import Footer from '../components/layouts/Footer.astro';
+import cv from '../config/cv.json';
+import type { Locale } from '../i18n/ui';
+import { computeLayoutMeta } from '../utils/layoutMeta';
 
 import '../styles/index.css';
 
-interface Props {
-	title: string;
-}
+// Extract CV parts with safe fallbacks
+const basic: any = (cv as any)?.basic ?? {};
+const socialLinks: any[] = (cv as any)?.socialLinks ?? [];
+const menuItems: any[] = (cv as any)?.menuItems ?? [];
+const education: any[] = (cv as any)?.education ?? [];
 
-const { title } = Astro.props;
+interface Props { title?: string; description?: string; image?: string; lang?: Locale }
+const { title, description, image, lang = 'fr' } = Astro.props as Props;
+
+const site = Astro.site;
+const path = Astro.url.pathname;
+
+const {
+	canonical,
+	enAlt,
+	frAlt,
+	defaultTitle,
+	defaultDescription,
+	ogImage,
+	personJsonLd
+} = computeLayoutMeta({
+	site,
+	path,
+	lang,
+	basic,
+	socialLinks,
+	menuItems,
+	education,
+	image,
+	title,
+		description
+		});
+
+// Build JSON-LD string in frontmatter so TS sees usage of personJsonLd
+// Use globalThis to avoid lib typing issues during Astro's TS analysis
+const personJsonLdStr = (globalThis && (globalThis as any).JSON
+	? (globalThis as any).JSON.stringify(personJsonLd ?? {})
+	: '{}');
+// Mark as read for TypeScript to avoid unused variable hint
+void personJsonLdStr;
+
 ---
-
 <!doctype html>
-<html lang="en" class="h-full" data-theme="light">
+<html lang={lang} class="h-full" data-theme="light">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
+		<meta name="description" content={defaultDescription} />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="sitemap" href="/sitemap-index.xml" />
+		{canonical && <link rel="canonical" href={canonical} />}
+		{enAlt && <link rel="alternate" hreflang="en" href={enAlt} />}
+		{frAlt && <link rel="alternate" hreflang="fr" href={frAlt} />}
+		{enAlt && <link rel="alternate" hreflang="x-default" href={enAlt} />}
 		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+		<title>{defaultTitle}</title>
 
-		<!-- initialize theme -->
+		<!-- Open Graph / Twitter -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={defaultTitle} />
+		<meta property="og:description" content={defaultDescription} />
+		{canonical && <meta property="og:url" content={canonical} />}
+		<meta property="og:image" content={ogImage} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={defaultTitle} />
+		<meta name="twitter:description" content={defaultDescription} />
+		<meta name="twitter:image" content={ogImage} />
+
+		<script type="application/ld+json" is:inline>{personJsonLdStr}</script>
+
+		<!-- initialize theme (supports light, dark, retrowave) -->
 		<script is:inline>
-			const themeSaved = localStorage.getItem("theme");
-
-			if (themeSaved) {
-				document.documentElement.dataset.theme = themeSaved;
-			} else {
+			let saved = localStorage.getItem("theme");
+			if (!saved) {
 				const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-				document.documentElement.dataset.theme = prefersDark ? "dark" : "light";
+				saved = prefersDark ? 'dark' : 'light';
+				localStorage.setItem('theme', saved);
 			}
-
-			window
-				.matchMedia("(prefers-color-scheme: dark)")
-				.addEventListener("change", (event) => {
-					if (!localStorage.getItem("theme")) {
-						document.documentElement.dataset.theme = event.matches
-							? "dark"
-							: "light";
-					}
-				});
+			document.documentElement.dataset.theme = saved;
 		</script>
 	</head>
 	<body class="h-full flex flex-col overflow-x-hidden bg-default

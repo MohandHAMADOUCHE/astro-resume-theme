@@ -1,41 +1,76 @@
 ---
-import { Icon } from "astro-icon/components";
-import { menuItems, socialLinks } from "../../config/cv.json";
+import AnyIcon from "../common/AnyIcon.astro";
+import cv from "../../config/cv.json";
+const { socialLinks, basic } = (cv as any);
+import type { Locale } from "../../i18n/ui";
+import { t } from "../../i18n/ui";
+const locale: Locale = Astro.url.pathname.startsWith('/fr') ? 'fr' : 'en';
+// Year (safe without relying on TS lib typings)
+const DateCtor: any = (globalThis as any)?.Date;
+const currentYear = DateCtor ? new DateCtor().getFullYear() : 2025;
+
+// Social list (precompute once; simple and easy to edit)
+const socialList: any[] = ((globalThis as any)?.Array?.isArray(socialLinks)) ? (socialLinks as any[]) : [];
 ---
 
-<section class="py-10 mt-4">
-    <div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-        <div class="text-center xl:flex xl:items-center xl:justify-between xl:text-left">
-            <div class="xl:flex xl:items-center xl:justify-start">
-                <p class="mt-5 text-sm xl:ml-6 xl:mt-0">
-                    © 2024 Paul Smith. All Rights Reserved.
-                </p>
+<footer class="mt-12 bg-background">
+        <div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+    <!-- Top gradient bar (match width with grey line/container) -->
+    <div class="h-2 w-full" style={`background: linear-gradient(90deg, var(--color-secondary), var(--color-primary));`}></div>
+        <div class="py-10 md:py-14 grid grid-cols-1 md:grid-cols-3 gap-10">
+        <!-- Left: Name and bio -->
+            <div class="flex flex-col items-center text-center">
+                        <h3 class="text-2xl font-bold retro-title">{basic?.name}</h3>
+                        <p class="mt-3 text-sm text-offset">{(locale === 'en' ? basic?.locales?.en?.job : basic?.job) ?? basic?.job}</p>
+                                        <p class="mt-3 text-sm">{t(locale, 'footerBlurb', 'Practical notes on DevOps, Cloud, and modern software delivery.')}</p>
+                    </div>
+
+            <!-- Middle: Connect social icons (centered) -->
+            <div class="flex flex-col items-center text-center">
+                <h4 class="text-lg font-semibold">{t(locale, 'connect', 'Connect')}</h4>
+                <div class="mt-4 flex items-center justify-center gap-4">
+                    {(() => {
+                        const A: any = socialList as any;
+                        const L = (A && typeof A.length === 'number') ? A.length : 0;
+                        const nodes: any = [] as any;
+                        for (let i = 0; i < L; i++) {
+                            const s: any = A[i];
+                            (nodes as any).push(
+                                <a href={s.link} target="_blank" rel="noopener noreferrer" class="p-2 rounded hover:bg-background-offset focus:bg-background-offset" aria-label={s.iconName}>
+                                    <AnyIcon name={s.iconName} class="size-6" />
+                                </a>
+                            );
+                        }
+                        return nodes as any;
+                    })()}
+                </div>
             </div>
 
-            <div class="items-center mt-8 xl:mt-0 xl:flex xl:justify-end xl:space-x-8">
-                <ul class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 xl:justify-end">
-                    {menuItems.map(menu => (
-                        <li>
-                            <a href={menu.link} title={menu.name} class="text-sm transition-all duration-300 hover:text-offset focus:text-offset">
-                                {menu.name}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
+            <!-- Right: Quick Links (centered) -->
+                    <div class="flex flex-col items-center text-center">
+                        <h4 class="text-lg font-semibold">{t(locale, 'quickLinks', 'Quick Links')}</h4>
+                        {(() => {
+                            const isFR = Astro.url.pathname.startsWith('/fr');
+                            const homeHref = isFR ? '/fr/' : '/';
+                            const aboutHref = isFR ? '/fr/about' : '/about';
+                            // Temporarily point Blog to local 404 placeholder while blog isn't live
+                            const blogHref = '/404';
+                            return (
+                                <ul class="mt-4 space-y-2 text-center">
+                                    <li><a href={homeHref} class="hover:text-offset">{t(locale, 'home', 'Home')}</a></li>
+                                    <li><a href={blogHref} class="hover:text-offset">{t(locale, 'blog', 'Blog')}</a></li>
+                                    <li><a href={aboutHref} class="hover:text-offset">{t(locale, 'about', 'About')}</a></li>
+                                </ul>
+                            );
+                        })()}
+                    </div>
+        </div>
 
-                <div class="w-full h-px mt-8 mb-5 xl:w-px xl:m-0 xl:h-6 bg-border"></div>
+        <hr class="border-border" />
 
-                <ul class="flex items-center justify-center space-x-8 xl:justify-end">
-                    {socialLinks.map(social => (
-                        <li>
-                            <a href={social.link} title={social.iconName} target="_blank" rel="noopener noreferrer"
-                               class="block transition-all duration-300 hover:text-offset focus:text-offset">
-                                <Icon name={social.iconName} />
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+        <div class="py-6 md:py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+            <p class="text-offset">© {currentYear} {basic?.name}. All rights reserved.</p>
+            <p class="italic text-offset">Building the future, one line of code at a time 🚀</p>
         </div>
     </div>
-</section>
+</footer>

@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { t } from '../i18n/ui';
+import AnyIcon from '../components/common/AnyIcon.astro';
+import cv from '../config/cv.json';
+const basic: any = (cv as any)?.basic ?? {};
+---
+
+<Layout title="Contact" lang="en">
+  <section class="py-12 bg-background">
+  <div class="container mx-auto px-6 max-w-6xl">
+  <h1 class="text-3xl font-bold tracking-tight text-default">{t('en','contactTitle','Get in touch')}</h1>
+      <p class="mt-2 text-offset">{t('en','contactSubtitle','Send me a message and I\'ll get back to you soon.')}</p>
+
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-12 gap-8 items-start">
+        <div class="sm:col-span-7 sm:order-2">
+          <form id="contact_form" name="contact" method="POST" action={`https://formsubmit.co/${basic?.email}`} class="space-y-6 bg-background-offset p-6 rounded-xl border border-border">
+            <input type="hidden" name="_subject" value="New message from portfolio contact form" />
+            <input type="hidden" name="_captcha" value="true" />
+            <p class="hidden" aria-hidden="true">
+              <label>Don’t fill this out: <input name="website" tabindex="-1" autocomplete="off" /></label>
+            </p>
+            <div>
+              <label class="block text-sm font-medium mb-1 text-default" for="name">{t('en','nameLabel','Name')} <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> required</span></label>
+              <input id="name" name="name" type="text" required class="w-full rounded border border-border bg-transparent text-default placeholder:text-default/70 caret-primary px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/40" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1 text-default" for="email">{t('en','emailLabel','Email')} <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> required</span></label>
+              <input id="email" name="email" type="email" required class="w-full rounded border border-border bg-transparent text-default placeholder:text-default/70 caret-primary px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/40" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1 text-default" for="message">{t('en','messageLabel','Message')} <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> required</span></label>
+              <textarea id="message" name="message" rows="6" required class="w-full rounded border border-border bg-transparent text-default placeholder:text-default/70 caret-primary px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/40"></textarea>
+            </div>
+            <div id="messageBox" class="hidden text-sm"></div>
+            <div class="flex justify-center">
+              <button type="submit" class="inline-flex items-center justify-center px-6 py-3 text-base text-white font-semibold transition-all duration-200 rounded bg-primary hover:bg-secondary focus:bg-secondary retro-cta">
+                {t('en','send','Send')}
+              </button>
+            </div>
+          </form>
+        </div>
+  <aside class="sm:col-span-5 sm:order-1">
+          <div class="relative group overflow-hidden rounded-xl">
+    <!-- Blurred base image -->
+  <img src="/images/phd-2.png" alt="PhD illustration" loading="lazy"
+                 class="block w-full h-auto transition-transform duration-500 ease-out blur-md group-hover:scale-105" />
+            <!-- Sharp center reveal on hover -->
+  <img src="/images/phd-2.png" alt="" aria-hidden="true"
+                 class="pointer-events-none absolute inset-0 w-full h-full object-contain opacity-0 group-hover:opacity-100 transition duration-500 ease-out transform group-hover:scale-105 [mask-image:radial-gradient(circle_at_center,white_0%,white_45%,transparent_70%)]" />
+          </div>
+          <div class="mt-[5px] space-y-3 rounded-xl p-4">
+            <a href={`mailto:${basic?.email}`} class="flex w-full items-center gap-3 text-default hover:text-primary focus:text-primary">
+              <AnyIcon name="tabler:mail" class="size-5" aria-hidden="true" />
+              <span class="break-all md:break-words">{basic?.email}</span>
+            </a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+<script is:inline>
+  const form = document.getElementById('contact_form');
+  const box = document.getElementById('messageBox');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const honeypotEl = form.querySelector('input[name="website"]');
+      const honeypot = honeypotEl && (honeypotEl).value ? (honeypotEl).value : '';
+      if (honeypot) {
+        // Bot detected: pretend success
+        box && box.classList.remove('hidden','text-red-600');
+        box && box.classList.add('text-green-600');
+        if (box) box.textContent = 'Thanks!';
+        if (typeof form.reset === 'function') form.reset();
+        return;
+      }
+
+      const data = new FormData(form);
+      const action = form.getAttribute('action') || '';
+      try {
+        const resp = await fetch(action, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: data
+        });
+        if (resp.ok) {
+          box && box.classList.remove('hidden','text-red-600');
+          box && box.classList.add('text-green-600');
+          if (box) box.textContent = 'Your message has been sent successfully!';
+          if (typeof form.reset === 'function') form.reset();
+        } else {
+          throw new Error('Request failed');
+        }
+      } catch (err) {
+        box && box.classList.remove('hidden','text-green-600');
+        box && box.classList.add('text-red-600');
+        if (box) box.textContent = 'An error occurred while sending the form. Please try again.';
+      }
+    });
+  }
+</script>
+</Layout>

@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://astro-resume-theme.netlify.app/sitemap-index.xml
+# Update sitemap to your primary domain
+Sitemap: https://mohand-hamadouche.info/sitemap-index.xml
