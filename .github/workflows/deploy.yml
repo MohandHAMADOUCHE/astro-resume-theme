@@ -46,7 +46,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: website-portfolio
+          projectName: astro-resume-theme
           directory: dist
           branch: ${{ github.ref_name }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
