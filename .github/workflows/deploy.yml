@@ -29,12 +29,16 @@ jobs:
 
       - name: Inject version metadata into health page
         run: |
+          set -euo pipefail
           BRANCH="${GITHUB_REF_NAME}"
           SHORT_SHA="$(git rev-parse --short HEAD)"
-          for FILE in dist/health/index.html dist/heath/index.html; do
+          # Escape replacement chars for sed (/, \\, &)
+          ESCAPED_BRANCH=$(printf '%s' "$BRANCH" | sed -e 's/[\\/&]/\\&/g')
+          ESCAPED_SHA=$(printf '%s' "$SHORT_SHA" | sed -e 's/[\\/&]/\\&/g')
+          for FILE in dist/health/index.html; do
             if [ -f "$FILE" ]; then
-              sed -i "s/__BRANCH__/${BRANCH}/g" "$FILE"
-              sed -i "s/__COMMIT__/${SHORT_SHA}/g" "$FILE"
+              sed -i "s|__BRANCH__|${ESCAPED_BRANCH}|g" "$FILE"
+              sed -i "s|__COMMIT__|${ESCAPED_SHA}|g" "$FILE"
               echo "Injected BRANCH=${BRANCH} COMMIT=${SHORT_SHA} into $FILE"
             else
               echo "Health page not found at $FILE (skipping injection)"
@@ -42,11 +46,13 @@ jobs:
           done
 
       - name: Deploy to Cloudflare Pages
+        if: ${{ github.event_name == 'push' }}
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: astro-resume-theme
+          # Use repository name automatically for Cloudflare Pages project
+          projectName: ${{ github.event.repository.name }}
           directory: dist
           branch: ${{ github.ref_name }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

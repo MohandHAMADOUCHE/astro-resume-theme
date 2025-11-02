@@ -1,26 +1,24 @@
-# Astro Resume Theme
+# Mohand Hamadouche — Portfolio
 
-Astro Resume Theme is a fully customizable and responsive portfolio/CV site built with Astro and Tailwind CSS. This repository contains a ready-to-run site you can clone and customize for your personal use.
+Personal portfolio/CV website built with Astro and Tailwind CSS. This repository contains the source code for my portfolio, ready for local development and deployment.
 
-## Usage (for this repository)
+## Quick start
 
-This repository is not published as a public Astro template. To run this project locally, clone the repository, install dependencies, and start the dev server:
+To run the project locally, install dependencies and start the development server:
 
 ```bash
-# Clone the repository (replace with your repo URL if different)
-git clone <your-repo-url>
-cd website-portfolio
+# Clone the repository
+git clone git@github.com:MohandHAMADOUCHE/mhd-portfolio-theme.git
+cd mhd-portfolio-theme
 
 # Install dependencies
 npm install
 
-# Start dev server
+# Start the development server
 npm run dev
 ```
 
-If you're already working on the machine that contains the repository, you can skip the clone step.
-
-The dev server runs by default at http://localhost:4321
+The dev server runs at http://localhost:4321 by default.
 
 ## Features
 
@@ -85,8 +83,47 @@ Routes:
 ## Deployment
 
 - Build locally with: `npm run build` (runs `astro check && astro build`).
-- Deploy the `dist/` directory to static hosts like Vercel, Netlify, or Cloudflare Pages.
-- Ensure the Node version on your hosting platform matches the project requirements.
+- Deploy the `dist/` directory to a static host (Cloudflare Pages, Vercel, Netlify, …).
+- This repo includes a GitHub Actions workflow for automatic deployment to Cloudflare Pages: `.github/workflows/deploy.yml`.
+- If you use this workflow, configure the repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in your repo settings.
+
+### Deploying to Cloudflare Pages
+
+You can deploy in two ways: connect the repo directly in Cloudflare Pages, or use the included GitHub Actions workflow.
+
+Option A — Connect Git (recommended for simplicity)
+1. In Cloudflare Dashboard → Pages → Create a project → Connect to Git.
+2. Select this repository (`mhd-portfolio-theme`).
+3. Build settings:
+  - Framework preset: Astro (or None)
+  - Build command: `npm run build`
+  - Build output directory: `dist`
+  - Environment variables (Build): `NODE_VERSION=20`
+4. Choose your production branch (e.g., `main`). Save and deploy.
+5. Cloudflare will build on every push; non-production branches get Preview deployments.
+
+Option B — GitHub Actions (already included in this repo)
+1. Create a Cloudflare API token with Pages:Edit permission and note your Account ID.
+2. In GitHub → Settings → Secrets and variables → Actions, add:
+  - `CLOUDFLARE_ACCOUNT_ID` → your Cloudflare account ID
+  - `CLOUDFLARE_API_TOKEN` → the API token created above
+3. The workflow `.github/workflows/deploy.yml` will:
+  - Build the site
+  - Deploy to Cloudflare Pages using `cloudflare/pages-action@v1`
+  - Use the repository name automatically as the project name: `${{ github.event.repository.name }}`
+  - Publish from the `dist` directory and use the current ref name for the branch
+4. In your Cloudflare Pages project settings, ensure the Production branch matches your repo (typically `main`).
+
+Notes
+- If you trigger the workflow outside of `push`/`pull_request` (e.g., `workflow_dispatch`), you can set a fallback project name via an env var step:
+
+  ```yaml
+  - name: Set repo name env (fallback)
+   run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
+  ```
+
+  And then set `projectName: ${{ env.REPO_NAME }}` in the deploy step.
+- Make sure Cloudflare uses Node 20 during builds (set `NODE_VERSION=20` in Pages → Settings → Environment variables).
 
 ## Development tips
 
