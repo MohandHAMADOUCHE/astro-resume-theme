@@ -1,15 +1,16 @@
-name: Deploy to GitHub Pages
+name: Deploy to Cloudflare Pages (Portfolio)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
+  pull_request:
 
 jobs:
-  build_and_deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
+    concurrency:
+      group: pages-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,6 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -25,10 +27,26 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v3
+      - name: Inject version metadata into health page
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          SHORT_SHA="$(git rev-parse --short HEAD)"
+          for FILE in dist/health/index.html dist/heath/index.html; do
+            if [ -f "$FILE" ]; then
+              sed -i "s/__BRANCH__/${BRANCH}/g" "$FILE"
+              sed -i "s/__COMMIT__/${SHORT_SHA}/g" "$FILE"
+              echo "Injected BRANCH=${BRANCH} COMMIT=${SHORT_SHA} into $FILE"
+            else
+              echo "Health page not found at $FILE (skipping injection)"
+            fi
+          done
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
         with:
-          path: ./dist
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: website-portfolio
+          directory: dist
+          branch: ${{ github.ref_name }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
