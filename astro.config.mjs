@@ -7,6 +7,11 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   // Assumption: main site domain
   site: "https://mohand-hamadouche.info",
+  // Inline all CSS into the HTML to avoid extra stylesheet requests
+  // and reduce render-blocking round-trips on small styles.
+  build: {
+    inlineStylesheets: 'always'
+  },
   integrations: [
     tailwind(),
     mdx(),
