@@ -41,12 +41,12 @@ const hasPhD: any = !!((basic as any)?.hasPhD);
                                 )}
 
                 <div class="mt-10 sm:flex sm:items-center sm:space-x-4">
-                    <a id="cv-action" href="#" title={t(locale, 'downloadCV', 'Download CV')}
+                    <button id="cv-action" type="button" title={t(locale, 'downloadCV', 'Download CV')}
                         class="inline-flex items-center justify-center px-6 py-3 text-base text-white
                             font-semibold transition-all duration-200 rounded retro-cta
-                            bg-primary hover:bg-secondary focus:bg-secondary" role="button">
+                            bg-primary hover:bg-secondary focus:bg-secondary">
                         {t(locale, 'downloadCV', 'Download CV')}
-                    </a>
+                    </button>
                     {basic?.email && (
                         <a href={`mailto:${basic.email}`} title={t(locale, 'contact', 'Contact')}
                            class="inline-flex items-center justify-center px-6 py-3 text-base font-semibold transition-all duration-200 rounded border border-default hover:bg-background-offset focus:bg-background-offset">
