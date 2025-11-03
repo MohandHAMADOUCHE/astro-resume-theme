@@ -1,5 +1,6 @@
 ---
 import { basic } from '../../config/cv.json';
+import OptimizedImage from '../common/OptimizedImage.astro';
 import type { Locale } from '../../i18n/ui';
 import { t } from '../../i18n/ui';
 
@@ -12,9 +13,15 @@ const hasPhD: any = !!((basic as any)?.hasPhD);
 <section class="py-5 px-4 sm:py-10 lg:py-16">
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="grid items-center grid-cols-1 gap-12 lg:grid-cols-2">
-            <div class="relative flex justify-center self-center">
-                <img class="w-full md:max-w-md lg:max-w-md rounded-full transform scale-90" src={basic?.avatar ?? '/images/avatar.png'} loading="eager" alt={basic?.name} />
-            </div>
+                        <div class="relative flex justify-center self-center">
+                                <OptimizedImage
+                                    class="w-full md:max-w-md lg:max-w-md rounded-full transform scale-90"
+                                    src={basic?.avatar ?? '/images/avatar.png'}
+                                    alt={basic?.name || 'Avatar'}
+                                    priority={true}
+                                    sizes="(max-width: 640px) 60vw, (max-width: 1024px) 40vw, 320px"
+                                />
+                        </div>
             <div class="self-center">
                 <p class="text-lg text-offset flex items-center gap-2">
                     <span class="hero-job">{(locale === 'en' ? basic?.locales?.en?.job : basic?.job) ?? basic?.job}</span>

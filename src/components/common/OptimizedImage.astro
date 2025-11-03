@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+
+export interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  priority?: boolean; // LCP image if true
+  sizes?: string;
+  widths?: number[];
+}
+
+const { src, alt, class: className = '', priority = false } = Astro.props as Props;
+const sizes = (Astro.props as Props).sizes ?? '(max-width: 640px) 60vw, (max-width: 1024px) 40vw, 320px';
+const widths = (Astro.props as Props).widths ?? [160, 240, 320, 480, 640];
+
+// Try to resolve an internal asset in src/assets/images by basename
+// so we can use astro:assets for responsive generation.
+// Use an untyped glob to avoid strict type issues in some editors
+const modules = import.meta.glob(
+  '../../assets/images/**/*.{png,jpg,jpeg,webp,avif}',
+  { eager: true }
+);
+
+const srcStr = String(src ?? '');
+const baseWithExt = srcStr.split('/').pop() ?? '';
+const base = baseWithExt.replace(/\.[^.]+$/, '');
+
+let matched: any | null = null;
+for (const [p, mod] of Object.entries(modules)) {
+  if (p.endsWith(`/${base}.png`) || p.endsWith(`/${base}.jpg`) || p.endsWith(`/${base}.jpeg`) || p.endsWith(`/${base}.webp`) || p.endsWith(`/${base}.avif`)) {
+    matched = (mod as any).default;
+    break;
+  }
+}
+---
+{matched ? (
+  <Image
+    src={matched}
+    alt={alt}
+    class={className}
+    widths={widths}
+    sizes={sizes}
+    format="webp"
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+    decoding="async"
+  />
+) : (
+  <img
+    src={src}
+    alt={alt}
+    class={className}
+    loading={priority ? 'eager' : 'lazy'}
+    decoding="async"
+  />
+)}

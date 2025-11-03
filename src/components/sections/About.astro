@@ -1,5 +1,6 @@
 ---
 import cv from '../../config/cv.json';
+import OptimizedImage from '../common/OptimizedImage.astro';
 import type { Locale } from '../../i18n/ui';
 import { t } from '../../i18n/ui';
 
@@ -19,7 +20,13 @@ const email: string | undefined = basic?.email;
   <div class="grid items-center grid-cols-1 gap-12 lg:grid-cols-2">
       <!-- Left: same image and sizing as Hero -->
       <div class="relative flex justify-center self-center">
-        <img class="w-full md:max-w-md lg:max-w-md rounded-full transform scale-90" src={basic?.avatar ?? '/images/avatar.png'} loading="eager" alt={basic?.name} />
+        <OptimizedImage
+          class="w-full md:max-w-md lg:max-w-md rounded-full transform scale-90"
+          src={basic?.avatar ?? '/images/avatar.png'}
+          alt={basic?.name || 'Avatar'}
+          priority={false}
+          sizes="(max-width: 640px) 60vw, (max-width: 1024px) 40vw, 320px"
+        />
       </div>
 
       <!-- Right: About text only (no job label, no Ph.D. badge, no name) -->
