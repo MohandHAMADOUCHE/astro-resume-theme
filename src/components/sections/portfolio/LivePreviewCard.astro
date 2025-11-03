@@ -1,0 +1,107 @@
+---
+interface Props {
+  embedUrl?: string;
+  title: string;
+  description?: string;
+  link?: string; // optional external link button
+}
+const { embedUrl, title, description, link } = Astro.props as Props;
+const rootId = `lp_${Math.random().toString(36).slice(2)}`;
+let displayHost = '';
+try {
+  if (embedUrl) displayHost = new URL(embedUrl).host;
+} catch {
+  displayHost = embedUrl ?? '';
+}
+---
+
+<div class="group block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+  <div id={rootId} data-live-preview-root class="lp-root overflow-hidden rounded-xl shadow-md border border-default bg-white">
+    {embedUrl ? (
+      <>
+        <div class="preview">
+          <div class="viewport">
+            <div class="chrome">
+              <div class="dots"><span></span><span></span><span></span></div>
+              <div class="url" title={displayHost}>{displayHost || 'preview'}</div>
+              <div class="grow"></div>
+            </div>
+            <iframe
+              src={embedUrl}
+              title={`${title} — Live Preview`}
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              referrerpolicy="no-referrer"
+            />
+            </div>
+        </div>
+        <div class="caption">
+          <div class="caption-text">
+            <h3 class="caption-title">{title}</h3>
+            {description && <p class="caption-desc">{description}</p>}
+          </div>
+          <div class="caption-actions">
+            <div class="view-toggle" aria-label="Viewport">
+              <button type="button" class="view-btn" data-mode="desktop">Desktop</button>
+              <button type="button" class="view-btn" data-mode="mobile">Mobile</button>
+            </div>
+            {link && (
+              <a href={link} target="_blank" rel="noopener noreferrer" class="caption-action">Ouvrir</a>
+            )}
+          </div>
+        </div>
+      </>
+    ) : (
+      <div class="empty">
+        <p class="text-sm text-offset">No preview URL configured. Set PUBLIC_BARI91_PREVIEW_URL to enable live preview.</p>
+      </div>
+    )}
+  </div>
+</div>
+
+<script>
+  // Initialize controls for all preview cards (no spinner)
+  const init = () => {
+    document.querySelectorAll('[data-live-preview-root]').forEach((root) => {
+      const desktopBtn = root.querySelector('[data-mode="desktop"]');
+      const mobileBtn = root.querySelector('[data-mode="mobile"]');
+      desktopBtn && desktopBtn.addEventListener('click', () => {
+        root.classList.remove('is-mobile');
+      });
+      mobileBtn && mobileBtn.addEventListener('click', () => {
+        root.classList.add('is-mobile');
+      });
+    });
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+</script>
+
+<style>
+  .preview { position: relative; width: 100%; background: #fafafa; padding: 1rem; }
+  .viewport { position: relative; margin: 0 auto; width: 100%; aspect-ratio: 16 / 9; border-radius: 0.75rem; overflow: hidden; background: #fff; border: 1px solid var(--border, #e5e7eb); box-shadow: 0 6px 24px rgba(0,0,0,0.06); }
+  .chrome { position: absolute; top: 0; left: 0; right: 0; height: 36px; display: flex; align-items: center; gap: .5rem; padding: 0 .75rem; background: linear-gradient(180deg, #f5f5f7, #e9ebef); border-bottom: 1px solid rgba(0,0,0,0.06); z-index: 2; }
+  .dots { display: inline-flex; gap: .35rem; }
+  .dots span { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+  .dots span:nth-child(1) { background: #ff5f57; }
+  .dots span:nth-child(2) { background: #febc2e; }
+  .dots span:nth-child(3) { background: #28c840; }
+  .url { font-size: .85rem; color: #444; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: .75rem; }
+  .preview iframe { position: absolute; left: 0; right: 0; bottom: 0; top: calc(36px + 1rem); width: 100%; height: calc(100% - (36px + 1rem)); border: 0; }
+  .lp-root.is-mobile .viewport { width: 390px; aspect-ratio: 390 / 844; }
+  .lp-root.is-mobile .preview { display: grid; place-items: center; }
+  /* Loading spinner removed */
+
+  .caption { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .75rem .9rem; background: #fff; border-top: 1px solid var(--border, #e5e7eb); }
+  .caption-title { font-size: 1rem; font-weight: 600; color: var(--text, #111); }
+  .caption-desc { margin-top: .15rem; font-size: .85rem; color: var(--muted, #555); }
+  .caption-text { display: grid; gap: .1rem; }
+  .caption-actions { display: inline-flex; align-items: center; gap: .5rem; }
+  .view-btn { appearance: none; background: #f3f4f6; color: #111; border: 1px solid #e5e7eb; padding: .35rem .55rem; border-radius: .5rem; font-size: .8rem; cursor: pointer; }
+  .view-btn:hover { background: #e9ebef; }
+  .caption-action { display: inline-flex; align-items: center; gap: .4rem; padding: .4rem .65rem; border-radius: .5rem; font-size: .85rem; background: var(--primary); color: var(--on-primary); text-decoration: none; }
+  .empty { display: flex; align-items: center; justify-content: center; min-height: 10rem; padding: 1rem; text-align: center; }
+</style>

@@ -1,16 +1,19 @@
 ---
 import Project from '../Project.astro';
+import LivePreviewCard from './LivePreviewCard.astro';
 import { projects } from '../../../config/cv.json';
 import { localizeProjects, splitHeadTail } from '../../../utils/localize';
 import type { Locale } from '../../../i18n/ui';
 import { t } from '../../../i18n/ui';
-import previewImg from '../../../assets/images/mohand_hamadouche.png';
+// Embedded live preview URL (env override, default to prod)
+const previewEmbedUrl = import.meta.env.PUBLIC_BARI91_PREVIEW_URL || 'https://bari91inc.mohand-hamadouche.info/';
+const previewExternalLink = previewEmbedUrl;
 
 interface Props { locale?: Locale }
 const { locale = 'fr' } = Astro.props as Props;
 const localized = localizeProjects(projects as any, locale as any);
 const { head: firstRow, tail: remainder } = splitHeadTail(localized, 3);
-const previewUrl = import.meta.env.PUBLIC_BARI91_PREVIEW_URL || 'https://github.com/MohandHAMADOUCHE/bari91-company-website';
+// (no dedicated link here; we embed directly in the card)
 ---
 
 <section class="bg-background">
@@ -73,17 +76,18 @@ const previewUrl = import.meta.env.PUBLIC_BARI91_PREVIEW_URL || 'https://github.
             </div>
         </div>
 
-        <!-- Additional Live Preview row -->
+        <!-- Additional: embedded site preview (centered) -->
         <div class="mt-16">
-            <h2 class="text-2xl font-semibold text-center">{t(locale, 'livePreview', 'Live previews')}</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
-                <div>
-                    <Project
-                        imageUrl={previewImg}
-                        title={t(locale, 'bari91Title', 'Bari91 — Company Website')}
-                        type={t(locale, 'website', 'Website')}
-                        link={previewUrl}
-                        description={t(locale, 'bari91Desc', 'Live preview of the Bari91 company website')}
+            <h2 class="text-3xl font-semibold text-center capitalize lg:text-4xl mb-4" role="heading" aria-level="1">{t(locale, 'liveSectionTitle', 'Project in production')}</h2>
+            <p class="mt-2 text-center text-offset">{t(locale, 'liveSectionIntro1', "Client project I designed, developed, and maintain. Focus: accessibility, SEO, and performance.")}</p>
+            <p class="mt-1 text-center text-offset">{t(locale, 'liveSectionIntro2', 'Deployed on Cloudflare Pages via GitHub Actions CI. Below is an interactive preview.')}</p>
+            <div class="mt-8 flex justify-center">
+                <div class="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-2/5 max-w-3xl">
+                    <LivePreviewCard
+                      embedUrl={previewEmbedUrl}
+                      title={t(locale, 'bari91Title', 'Bari91 — Company Website')}
+                      description={t(locale, 'bari91Desc', 'Live preview of the Bari91 company website')}
+                      link={previewExternalLink}
                     />
                 </div>
             </div>

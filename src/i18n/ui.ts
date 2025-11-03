@@ -31,6 +31,10 @@ export const UI: Record<Locale, Record<string, string>> = {
     experienceCalloutTitle: 'Envie d’en savoir plus ?',
     experienceCalloutJoke: 'Promis, je réponds plus vite que ma cafetière ne chauffe ☕',
     contactMe: 'Contactez-moi',
+    // Live preview section
+    liveSectionTitle: 'Projet en production',
+    liveSectionIntro1: "Projet client que j'ai conçu, développé et que je maintiens. Focus: accessibilité, SEO et performances.",
+    liveSectionIntro2: 'Déployé sur Cloudflare Pages via CI GitHub Actions. Ci-dessous, un aperçu interactif.',
   },
   en: {
     home: 'Home',
@@ -62,6 +66,10 @@ export const UI: Record<Locale, Record<string, string>> = {
     experienceCalloutTitle: 'Want to know more?',
     experienceCalloutJoke: 'I reply faster than my coffee machine warms up ☕',
     contactMe: 'Contact me',
+    // Live preview section
+    liveSectionTitle: 'Project in production',
+    liveSectionIntro1: 'Client project I designed, developed, and maintain. Focus: accessibility, SEO, and performance.',
+    liveSectionIntro2: 'Deployed on Cloudflare Pages via GitHub Actions CI. Below is an interactive preview.',
   },
 };
 
