@@ -4,11 +4,13 @@ import { projects } from '../../../config/cv.json';
 import { localizeProjects, splitHeadTail } from '../../../utils/localize';
 import type { Locale } from '../../../i18n/ui';
 import { t } from '../../../i18n/ui';
+import previewImg from '../../../assets/images/mohand_hamadouche.png';
 
 interface Props { locale?: Locale }
 const { locale = 'fr' } = Astro.props as Props;
 const localized = localizeProjects(projects as any, locale as any);
 const { head: firstRow, tail: remainder } = splitHeadTail(localized, 3);
+const previewUrl = import.meta.env.PUBLIC_BARI91_PREVIEW_URL || 'https://github.com/MohandHAMADOUCHE/bari91-company-website';
 ---
 
 <section class="bg-background">
@@ -68,6 +70,22 @@ const { head: firstRow, tail: remainder } = splitHeadTail(localized, 3);
                         />
                     </div>
                 ))}
+            </div>
+        </div>
+
+        <!-- Additional Live Preview row -->
+        <div class="mt-16">
+            <h2 class="text-2xl font-semibold text-center">{t(locale, 'livePreview', 'Live previews')}</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
+                <div>
+                    <Project
+                        imageUrl={previewImg}
+                        title={t(locale, 'bari91Title', 'Bari91 — Company Website')}
+                        type={t(locale, 'website', 'Website')}
+                        link={previewUrl}
+                        description={t(locale, 'bari91Desc', 'Live preview of the Bari91 company website')}
+                    />
+                </div>
             </div>
         </div>
 
