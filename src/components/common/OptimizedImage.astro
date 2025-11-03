@@ -29,9 +29,11 @@ const srcStr = String(src ?? '');
 const baseWithExt = srcStr.split('/').pop() ?? '';
 const base = baseWithExt.replace(/\.[^.]+$/, '');
 
-// Dev server can be stricter with dynamic metadata; provide a safe fallback URL from /public/images
-const isDev = import.meta.env.DEV;
+// Provide a safe fallback URL from /public/images if no internal asset match is found
 const fallbackSrc = srcStr.startsWith('/images/') ? srcStr : `/images/${baseWithExt}`;
+// In dev, avoid using the <Image> component (which requires Sharp) and instead
+// render the matched asset URL directly to prevent /_image errors if Sharp is missing.
+const isDev = import.meta.env.DEV;
 
 let matched: any | null = null;
 for (const [p, mod] of Object.entries(modules)) {
@@ -41,18 +43,28 @@ for (const [p, mod] of Object.entries(modules)) {
   }
 }
 ---
-{matched && !isDev ? (
-  <Image
-    src={matched}
-    alt={alt}
-    class={className}
-    widths={widths}
-    sizes={sizes}
-    format={formats[0]}
-    loading={priority ? 'eager' : 'lazy'}
-    fetchpriority={priority ? 'high' : 'auto'}
-    decoding="async"
-  />
+{matched ? (
+  isDev ? (
+    <img
+      src={(matched as any).src}
+      alt={alt}
+      class={className}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  ) : (
+    <Image
+      src={matched}
+      alt={alt}
+      class={className}
+      widths={widths}
+      sizes={sizes}
+      format={formats[0]}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      decoding="async"
+    />
+  )
 ) : (
   <img
     src={fallbackSrc}
